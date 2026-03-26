@@ -4,6 +4,8 @@ import { serverUrl } from "../App";
 import {toast} from "react-toastify";
 import {PulseLoader} from "react-spinners";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setUserData } from "../redux/userSlice";
 const SignIn = () => {
     const [inputClicked, setInputClicked] = useState({
         userName: false,
@@ -14,6 +16,7 @@ const SignIn = () => {
     const [password, setPassword] = useState("");
     const [loading,setLoading] = useState(false);
     const [error,setError] = useState("");
+    const dispatch = useDispatch();
     const handleSignIn = async () => {
         try {
             if(!userName){
@@ -29,7 +32,9 @@ const SignIn = () => {
             if(result){
                 toast.success("Signin Successfull !!");
                 setLoading(false);
+                dispatch(setUserData(result.data));
             }
+
             setPassword("");
             setUserName("");
             navigate("/");

@@ -25,7 +25,9 @@ export const signUp = async (req,res) => {
             sameSite: "Strict",
             secure: false
         });
-        return res.status(201).json(user);
+        const userObj = user.toObject();
+        delete userObj.password;
+        return res.status(201).json(userObj);
     } catch (error) {
         return res.status(500).json({message: "SignUp Controller Error"});
     }
@@ -50,7 +52,9 @@ export const signIn = async (req,res) => {
             sameSite: "Strict",
             secure: false
         });
-        return res.status(200).json(user);
+        const userObj = user.toObject();
+        delete userObj.password;
+        return res.status(200).json(userObj);
     } catch (error) {
         return res.status(500).json({message: "SignIn Controller Error"});
     }
