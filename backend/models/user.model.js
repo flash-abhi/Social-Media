@@ -23,6 +23,16 @@ const userSchema = new mongoose.Schema(
     profileImage: {
       type: String,
     },
+    bio: {
+      type: String,
+    },
+    profession: {
+      type: String,
+    },
+    gender: {
+      type: String,
+      enum: ["male", "female"],
+    },
     followers: [
       {
         type: mongoose.Schema.Types.ObjectId,
@@ -52,16 +62,16 @@ const userSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Story",
     },
-    resetOtp : {
+    resetOtp: {
       type: String,
     },
     otpExpires: {
-      type: Date
+      type: Date,
     },
     isOtpVerify: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   { timestamps: true },
 );

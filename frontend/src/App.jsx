@@ -6,10 +6,12 @@ import Home from "./pages/Home";
 import ForgotPassword from "./pages/ForgotPassword";
 import { useSelector } from "react-redux";
 import useCurrentUser from "./hooks/getCurrentUser";
+import useSuggestedUser from "./hooks/getSuggestedUser";
 export const serverUrl = "http://localhost:8000"
 
 function App() {
   useCurrentUser();
+  useSuggestedUser();
   const {userData} = useSelector((state) => state.user);
   return (
     <>

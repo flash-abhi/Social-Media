@@ -5,9 +5,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { serverUrl } from "../App";
 import { setUserData } from "../redux/userSlice";
 import { toast } from "react-toastify";
+import OtherUser from "./OtherUser";
 
 const LeftHome =  () => {
-  const { userData } = useSelector((state) => state.user);
+  const { userData,suggestedUsers } = useSelector((state) => state.user);
+
   const dispatch = useDispatch();
   const handleLogout = async () => {
     try {
@@ -26,9 +28,9 @@ const LeftHome =  () => {
           <FaRegHeart className="text-white w-[25px] h-[25px]" />
         </div>
       </div>
-        <div className="flex items-center justify-between px-2 gap-2.5">
+        <div className="flex items-center justify-between px-2 gap-2.5 border-b-2 border-b-gray-900 py-2.5">
         <div className="flex items-center gap-2 ">
-          <div className="w-[55px] h-[55px] border-2 border-black rounded-full cursor-pointer overflow-hidden">
+          <div className="w-13.75 h-13.75 border-2 border-black rounded-full cursor-pointer overflow-hidden">
             <img
               src={userData?.profileImage || "EmptyDP.jpg"}
               alt=""
@@ -43,6 +45,13 @@ const LeftHome =  () => {
           </div>
         </div>
         <div className="text-blue-500 cursor-pointer" onClick={handleLogout} >Log Out</div>
+      </div>
+      {/* suggested users */}
+      <div className="w-full flex flex-col gap-5 p-5">
+        <h1 className="text-white text-[19px]">Suggeseted Users</h1>
+        {suggestedUsers && suggestedUsers.slice(0,3).map((user,index) => (
+          <OtherUser key={index} user={user}/>
+        ))}
       </div>
     </div>
   );

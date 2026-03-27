@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import { setUserData } from "../redux/userSlice";
 
 const useCurrentUser = () => {
-    const dispatch = useDispatch();
+  const dispatch = useDispatch();
   useEffect(() => {
     const fetchUser = async () => {
       try {
