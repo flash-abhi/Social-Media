@@ -11,16 +11,16 @@ const Navbar = () => {
   return (
     <div className='w-full lg:w-[40%] h-[80px] bg-black flex justify-around items-center fixed bottom-0 bottom-[16px]  rounded-full shadow-2xl shadow-[#000] z-[100]'>
         <div>
-            <HiHome className='text-white text-4xl'/>
+            <HiHome onClick={() => navigate("/")} className='text-white cursor-pointer text-4xl'/>
         </div>
         <div>
-            <RiSearchLine className='text-white text-4xl'/>
+            <RiSearchLine className='text-white cursor-pointer text-4xl'/>
         </div>
         <div>
-            <LuCirclePlus className='text-white text-4xl'/>
+            <LuCirclePlus className='text-white cursor-pointer text-4xl'/>
         </div>
         <div>
-            <RxVideo className='text-white text-4xl'/>
+            <RxVideo className='text-white cursor-pointer text-4xl'/>
         </div>
         <div onClick={() => navigate(`/profile/${userData?.userName}`)} className="w-10 h-10 border-2 border-black rounded-full cursor-pointer overflow-hidden">
             <img
