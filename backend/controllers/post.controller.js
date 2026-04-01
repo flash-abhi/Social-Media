@@ -24,15 +24,83 @@ export const uploadPost = async (req,res) => {
         const populatedPost = await Post.findById(post._id).populate("author","name userName profileImage");
         return res.status(201).json( populatedPost);
     } catch (error) {
-        res.status(500).json({error: error.message});
+        return res.status(500).json({error: error.message});
     }
 }
 
-export const getPosts = async (req,res) => {
+export const getAllPosts = async (req,res) => {
     try {
-        const posts = await Post.find().populate("author","name userName profileImage").sort({createdAt:-1});
+        const posts = await Post.find({author: req.userId}).populate("author","name userName profileImage").sort({createdAt:-1});
         return res.status(200).json(posts);
     } catch (error) {
-        res.status(500).json({error: error.message});
+        return res.status(500).json({error: error.message});
+    }
+}
+
+export const like = async (req,res) => {
+    try {
+        const postId = req.params.postId;
+        const post = await Post.findById(postId);
+        if(!post){
+            return res.status(404).json({message: "Post not found !"});
+        }
+        const alreadyLiked = post.likes.includes(req.userId);
+        if(alreadyLiked){
+            post.likes = post.likes.filter(id => id.toString() !== req.userId.toString());
+        }else{
+            post.likes.push(req.userId);
+        }   
+        await post.save();
+        post.populate("author","name userName profileImage").execPopulate();
+        return res.status(200).json(post);
+    } catch (error) {
+        return res.status(500).json({error: error.message});
+    }
+}
+
+export const comment = async (req,res) => {
+    try {
+        const {message} = req.body;
+        const postId = req.params.postId;
+        const post = await Post.findById(postId);
+        if(!post){
+            return res.status(404).json({message: "Post not found !"});
+        }
+        post.comments.push({
+            author: req.userId,
+            message
+        });
+        await post.save();
+        post.populate("author","name userName profileImage");
+        post.populate("comments.author");
+
+        const user = await User.findById(req.userId);
+        user.comments.push(post._id);
+        await user.save();
+        return res.status(200).json(post);
+
+    } catch (error) {
+        return res.status(500).json({error: error.message});
+    }
+}
+
+export const saved = async (req,res) =>{
+     try {
+        const postId = req.params.postId;
+        const user = await User.findById(req.userId);
+        if(!post){
+            return res.status(404).json({message: "Post not found !"});
+        }
+        const alreadySaved = user.saved.includes(postId);
+        if(alreadySaved){
+            user.saved = user.saved.filter(id => id.toString() !== postId.toString());
+        }else{
+            user.saved.push(postId);
+        }
+        await user.save();
+        user.populate("saved");
+        return res.status(200).json(user);
+    } catch (error) {
+        return res.status(500).json({error: error.message});
     }
 }
