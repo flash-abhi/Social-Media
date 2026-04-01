@@ -22,13 +22,19 @@ const loopSchema = new mongoose.Schema(
     ],
     comments: [
       {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
+        author: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "User",
+        },
+        message: {
+          type: String,
+          required: true,
+        },
       },
     ],
   },
   { timestamps: true },
 );
 
-const Loop = mongoose.model("Loop",loopSchema);
+const Loop = mongoose.model("Loop", loopSchema);
 export default Loop;

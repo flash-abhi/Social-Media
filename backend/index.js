@@ -5,6 +5,7 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import authRouter from "./routes/auth.route.js";
 import userRouter from "./routes/user.route.js";
+import postRouter from "./routes/post.route.js";
 dotenv.config({quiet:true});
 const app = express();
 const port = process.env.PORT;
@@ -17,6 +18,7 @@ app.use(cookieParser());
 
 app.use("/api/auth",authRouter);
 app.use("/api/user",userRouter);
+app.use("/api/post",postRouter);
 app.listen(port, () => {
     console.log("Server running on port ",port);
     connectDb(); 
