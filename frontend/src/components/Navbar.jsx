@@ -16,7 +16,7 @@ const Navbar = () => {
         <div>
             <RiSearchLine className='text-white cursor-pointer text-4xl'/>
         </div>
-        <div>
+        <div onClick={() => navigate("/upload")} className='bg-gradient-to-tr from-[#33e7f0] via-[#3cabe6] to-[#2760dc] p-1 rounded-full'>
             <LuCirclePlus className='text-white cursor-pointer text-4xl'/>
         </div>
         <div>

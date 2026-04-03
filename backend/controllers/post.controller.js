@@ -7,6 +7,7 @@ export const uploadPost = async (req,res) => {
         const {caption,mediaType} = req.body;
         // Process the uploaded post   
         let media ;
+        // console.log(req.file);
         if(req.file) {
             media = await uploadOnCloudinary(req.file.path);
         }else{
@@ -24,7 +25,8 @@ export const uploadPost = async (req,res) => {
         const populatedPost = await Post.findById(post._id).populate("author","name userName profileImage");
         return res.status(201).json( populatedPost);
     } catch (error) {
-        return res.status(500).json({error: error.message});
+        // console.log(error);
+        return res.status(500).json({message: error, stack: error.stack});
     }
 }
 
