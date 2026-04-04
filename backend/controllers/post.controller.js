@@ -7,7 +7,6 @@ export const uploadPost = async (req,res) => {
         const {caption,mediaType} = req.body;
         // Process the uploaded post   
         let media ;
-        // console.log(req.file);
         if(req.file) {
             media = await uploadOnCloudinary(req.file.path);
         }else{
@@ -25,7 +24,6 @@ export const uploadPost = async (req,res) => {
         const populatedPost = await Post.findById(post._id).populate("author","name userName profileImage");
         return res.status(201).json( populatedPost);
     } catch (error) {
-        // console.log(error);
         return res.status(500).json({message: error, stack: error.stack});
     }
 }
@@ -52,8 +50,8 @@ export const like = async (req,res) => {
         }else{
             post.likes.push(req.userId);
         }   
+        post.populate("author","name userName profileImage");
         await post.save();
-        post.populate("author","name userName profileImage").execPopulate();
         return res.status(200).json(post);
     } catch (error) {
         return res.status(500).json({error: error.message});

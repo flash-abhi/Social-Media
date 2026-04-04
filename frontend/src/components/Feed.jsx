@@ -2,8 +2,11 @@ import React from 'react'
 import { FaRegHeart } from 'react-icons/fa'
 import StoryDp from './StoryDp';
 import Navbar from './Navbar';
+import { useSelector } from 'react-redux';
+import Post from './Post';
 
 const Feed = () => {
+  const {postData} = useSelector(state => state.post);
   return (
     <div className='lg:w-[50%] w-full bg-black min-h-[100vh] lg:h-[100vh] relative lg:overflow-y-auto'>
         <div className="w-full h-25 lg:hidden flex items-center justify-between p-5">
@@ -20,6 +23,9 @@ const Feed = () => {
         </div>
         <div className="w-full min-h-screen flex flex-col  items-center gap-5 p-2.5 pt-10 bg-white rounded-t-[40px] relative pb-[120px]">
           <Navbar/>
+          {postData?.map((post,index) => (
+            <Post post={post} key={index}/>
+          ))}
         </div>
     </div>
   )

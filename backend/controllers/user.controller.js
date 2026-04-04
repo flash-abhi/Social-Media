@@ -36,7 +36,7 @@ export const editProfile = async (req,res) => {
             return res.status(400).json({message: "User not found"});
         }
         const sameUserWithUserName = await User.findOne({userName}).select("-password");
-        if(sameUserWithUserName && sameUserWithUserName._id != req.userId) {
+        if(sameUserWithUserName && sameUserWithUserName._id.toString() != req.userId) {
             return res.status(400).json({message: "Username Already Exists !"});
         }
         let profileImage ;
@@ -51,7 +51,6 @@ export const editProfile = async (req,res) => {
         user.bio = bio;
         user.profession = profession;
         user.gender = gender;
-
         await user.save();
         return res.status(200).json(user);
     } catch (error) {

@@ -39,6 +39,7 @@ const EditProfile = () => {
                 formdata.append("profileImage",backendImage);
             }
             const result = await axios.post(serverUrl + `/api/user/editProfile`,formdata,{withCredentials:true});
+            console.log(result);
             setLoading(false);
             
             dispatch(setProfileData(result?.data));
