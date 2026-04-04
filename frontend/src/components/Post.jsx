@@ -12,13 +12,25 @@ import { serverUrl } from '../App';
 import { setPostData } from '../redux/postSlice';
 
 const Post = ({post}) => {
+    console.log(post);
     const {userData} = useSelector((state) => state.user);
     const [showComment, setShowComment] = useState(false);
+    const [message, setMessage] = useState("");
     const dispatch = useDispatch();
     const {postData} = useSelector(state => state.post);
     const handleLike = async () => {
         try {
            const result = await axios.get(`${serverUrl}/api/post/like/${post._id}`,{withCredentials:true}); 
+           const updatedPost = result.data;
+           const updatedPosts = postData.map(p => p._id === post._id ? updatedPost : p);
+           dispatch(setPostData(updatedPosts));
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    const handleComment = async () => {
+        try {
+           const result = await axios.post(`${serverUrl}/api/post/comment/${post._id}`, { message }, { withCredentials: true });
            const updatedPost = result.data;
            const updatedPosts = postData.map(p => p._id === post._id ? updatedPost : p);
            dispatch(setPostData(updatedPosts));
@@ -78,12 +90,23 @@ const Post = ({post}) => {
         {showComment && <div className='w-full flex flex-col gap-6 pb-5'>
             <div className='w-full h-20 flex items-center justify-between px-5 relative'>
                 <div className='w-10 h-10 lg:w-12.5 lg:h-12.5 border-2 border-black/50 rounded-full cursor-pointer overflow-hidden'>
-                    <img src={post?.author?.profileImage || "EmptyDP.jpg"} alt="profile" className='w-full object-cover'/>
+                    <img src={userData?.profileImage || "EmptyDP.jpg"} alt="profile" className='w-full object-cover'/>
                 </div>
-                <input placeholder='Write your comment' type="text" className='px-2.5 mx-4 border-b-2 border-b-gray-500 w-[90%] outline-none h-10' />
+                <input onChange={(e) => setMessage(e.target.value)} value={message} placeholder='Write your comment' type="text" className='px-2.5 mx-4 border-b-2 border-b-gray-500 flex-1 outline-none h-10' />
                 <button className='cursor-pointer text-2xl'>
-                    <IoSend />
+                    <IoSend onClick={handleComment}/>
                 </button>
+            </div>
+            <div className='w-full max-h-[300px] overflow-auto'>
+                {post.comments?.map((comment,index) => (
+                    <div key={index}>
+                        <div className='w-10 h-10 lg:w-12.5 lg:h-12.5 border-2 border-black/50 rounded-full cursor-pointer overflow-hidden'>
+                            <img src={comment?.author?.profileImage || "EmptyDP.jpg"} alt="profile" className='w-full object-cover'/>
+                        </div>
+                        <div>{comment.message}</div>
+                    </div>
+                ))}
+                
             </div>
         </div>
         }
