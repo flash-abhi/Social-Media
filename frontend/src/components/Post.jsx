@@ -10,9 +10,9 @@ import { IoSend } from "react-icons/io5";
 import axios from 'axios';
 import { serverUrl } from '../App';
 import { setPostData } from '../redux/postSlice';
+import { setUserData } from '../redux/userSlice';
 
 const Post = ({post}) => {
-    console.log(post);
     const {userData} = useSelector((state) => state.user);
     const [showComment, setShowComment] = useState(false);
     const [message, setMessage] = useState("");
@@ -34,6 +34,14 @@ const Post = ({post}) => {
            const updatedPost = result.data;
            const updatedPosts = postData.map(p => p._id === post._id ? updatedPost : p);
            dispatch(setPostData(updatedPosts));
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    const handleSaved = async () => {
+        try {
+           const result = await axios.get(`${serverUrl}/api/post/saved/${post._id}`, { withCredentials: true });
+           dispatch(setUserData(result.data));
         } catch (error) {
             console.log(error);
         }
@@ -76,7 +84,7 @@ const Post = ({post}) => {
                 </div>
             </div>
                 {/* bookmark */}
-            <div className="">
+            <div className="" onClick={handleSaved}>
                 {userData?.saved?.includes(post._id) ? <FaBookmark className='text-[26px] cursor-pointer'/> :  <FaRegBookmark className='text-[26px] cursor-pointer' />}
             </div>
         </div>
@@ -97,13 +105,17 @@ const Post = ({post}) => {
                     <IoSend onClick={handleComment}/>
                 </button>
             </div>
-            <div className='w-full max-h-[300px] overflow-auto'>
+            <div className='max-h-[300px] px-5 overflow-auto flex flex-col items-start gap-4 '>
                 {post.comments?.map((comment,index) => (
-                    <div key={index}>
+                    <div key={index} className='flex gap-3 border-b w-full py-2 items-center'>
+                        
                         <div className='w-10 h-10 lg:w-12.5 lg:h-12.5 border-2 border-black/50 rounded-full cursor-pointer overflow-hidden'>
                             <img src={comment?.author?.profileImage || "EmptyDP.jpg"} alt="profile" className='w-full object-cover'/>
                         </div>
-                        <div>{comment.message}</div>
+                        <div>
+                            <h1 className='font-semibold'>{comment?.author?.userName}</h1>
+                            {comment.message}
+                        </div>
                     </div>
                 ))}
                 

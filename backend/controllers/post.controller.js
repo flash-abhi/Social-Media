@@ -85,6 +85,10 @@ export const saved = async (req,res) =>{
      try {
         const postId = req.params.postId;
         const user = await User.findById(req.userId);
+        const post = await Post.findById(postId);
+        if(!user){
+            return res.status(404).json({message: "User not found !"});
+        }
         if(!post){
             return res.status(404).json({message: "Post not found !"});
         }
